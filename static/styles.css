@@ -19,6 +19,7 @@ body {
     height: 100vh;
     font-family: 'Raleway', sans-serif;
     color: #fff;
+    padding: 0 4em; 
 }
 
 .nav--bar {
@@ -26,7 +27,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2em;
+    padding-top: 2em;
 }
 
 .logo {
@@ -41,12 +42,22 @@ body {
     margin-left: 3em;
 }
 
+.time--date .time{
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.time--date date{
+    word-spacing: 15px;
+}
+
 .aside {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1em;
 }
+
 .search input {
     width: 300px;
     height: 40px;
@@ -57,4 +68,38 @@ body {
     outline: none;
     border-style: none;
     border: 1px solid #09d15c;
+}
+
+/* Content styles */
+.content {
+    margin-top: 5em;
+}
+
+.content h2 {
+    font-size: 4rem;
+    font-weight: 600;
+}
+
+.content h4 {
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+.content .info {
+    width: 300px;
+    margin-top: 2em;
+}
+
+.cities {
+    display: flex;
+    gap: 2em;
+    margin-top: 2em;
+}
+
+.cities .temp {
+    font-size: 2.5rem;
+}
+
+.wind{
+    font-size: 1rem;
 }
