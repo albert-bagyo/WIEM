@@ -34,6 +34,10 @@ body {
     display: flex;
     gap: .5em;
 }
+
+.logo p{
+    font-weight: 600;
+}
 .time--date{
     display: flex;
     flex-direction: column;
@@ -76,12 +80,12 @@ body {
 }
 
 .content h2 {
-    font-size: 4rem;
+    font-size: 5rem;
     font-weight: 600;
 }
 
 .content h4 {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 500;
 }
 
@@ -98,8 +102,10 @@ body {
 
 .cities .temp {
     font-size: 2.5rem;
+    font-weight: 400;
 }
 
 .wind{
     font-size: 1rem;
+    margin-top: .5em;
 }
