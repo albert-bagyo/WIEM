@@ -1,0 +1,33 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.image {
+    width: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+}
+
+body {
+    background: url("./images/test.jpg") center center / cover no-repeat;
+    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100vh;
+}
+
+.nav--bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2em;
+}
+
+.logo {
+    display: flex;
+    gap: .5em;
+}
