@@ -30,10 +30,11 @@ body {
     padding: 0 4em;
     color: #fff;
     position: relative;
+    overflow: hidden;
 }
 
 .weather--image {
-    width: 50em;
+    width: 45em;
     object-fit: cover;
     position: absolute;
     top: 50%;
@@ -61,30 +62,110 @@ body {
     width: 30px;
 }
 
-.content {
-    width: 100%;
+.time--date{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 4em;
+}
+
+.time--date .time{
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.time--date date{
+    word-spacing: 15px;
+}
+
+.aside {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1em;
+}
+
+.search input {
+    width: 300px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    backdrop-filter: blur(10px);
+    padding: .5em;
+    outline: none;
+    border-style: none;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Content styles */
+.content {
+    margin-top: 3em;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    /* border: 1px solid red; */
+}
+
+.content h2 {
+    font-size: 4rem;
+    font-weight: 600;
+}
+
+.content h4 {
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+.content .info {
+    width: 300px;
+    margin-top: 2em;
+}
+
+.cities {
+    display: flex;
+    gap: 2em;
+    margin-top: 2em;
+}
+
+.cities .temp {
+    font-size: 2.5rem;
+}
+
+.wind{
+    font-size: 1rem;
+}
+
+.content .content-left {
+    width: 100%;
+    /* border: 1px solid blue; */
 }
 
 .content .content-right {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: flex-end;
     gap: 2em;
+    width: 100%;
+    /* border: 1px solid blue; */
 }
 
 .weather--data {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0 1em;
+    /* border: 1px solid red; */
 }
 
 .temp--condition {
     display: flex;
+    justify-content: flex-start;
     align-items: baseline;
     gap: 2em;
+    /* border: 1px solid blue; */
 }
 
 .temp--condition .condition{
@@ -130,6 +211,7 @@ body {
 
 .temperature h1 {
     font-size: 8em;
+    line-height: .6;
 }
 
 .temperature span {
@@ -170,7 +252,7 @@ body {
     border-radius: 20px;
 }
 
-.info {
+.weather-info {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto auto auto;
