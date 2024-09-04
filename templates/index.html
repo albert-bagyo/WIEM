@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,14 +14,11 @@
     <title>WIEM</title>
 </head>
 <body>
-    <!-- <img src="{{ url_for('static', filename='images/test.jpg') }}" class="image" /> -->
+    <img src="{{ url_for('static', filename='images/weather-icons/Day-Clear.png')}}" alt="clear day" class="weather--image"/>
     <nav class="nav--bar">
         <div class="logo">
-            <img src="#"/>
+            <img src="{{ url_for('static', filename='images/weather.png')}}" alt="logo" id="logo"/>
             <p>Weather Station</p>
-        </div>
-        <!-- <div class="nav-links">
-            <p>Home</p> -->
         </div>
         <section class="time--date">
             <div class="time">
@@ -37,7 +38,7 @@
         </section>
     </nav>
     <section class="content">
-        <section class="content--left">
+        <section class="content-left">
             <header>
                 <h2>Stormy</h2>
                 <h4>with Heavy Rain</h4>
@@ -59,12 +60,100 @@
                 <div class="city city--three">
                     <p class="temp">22<sup>o</sup></p>
                     <p class="wind">40.0NW</p>
-                    <p class="">Tamale</p>
+                    <p>Tamale</p>
                 </div>
             </section>
         </section>
-        <section class="content--right">
-
+        <section class="content-right">
+            <div class="weather--data">
+                <div class="temp--condition">
+                    <div class="condition">
+                        <p>31.99N</p>
+                        <p>Excellent</p>
+                    </div>
+                    <div class="temperature">
+                        <h1>27°</h1>
+                        <span>+/-</span>
+                    </div>
+                </div>
+                <div class="weather--details">
+                    <div class="intensity">
+                        <p><em>intensity</em></p>
+                        <p><em>zones</em></p>
+                    </div>
+                    <div class="description">
+                        <p>WIND: WSW 6 MPH</p>
+                        <p>UV INDEX: 0 OF 10</p>
+                        <p>-ACCRA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="other-weather-info">
+                <div class="weather-type">
+                    <div class="weather-info">
+                        <div class=" card humidity">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/humidity.png') }}" alt="humidity" class="weather--icons"/>
+                                <p>65%</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Humidity</p>
+                                <p>will be 65%</p>
+                            </div>
+                        </div>
+                        <div class="card wind-speed">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/wind.png') }}" alt="wind speed" class="weather--icons"/>
+                                <p>10MPH</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Wind speed</p>
+                                <p>will be 10MPH</p>
+                            </div>
+                        </div>
+                        <div class="card sunrise-sunset">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/sun.png') }}" alt="sun image" class="weather--icons"/>
+                                <p>06:30AM</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Sunrise</p>
+                                <p>at 6:30AM</p>
+                            </div>
+                        </div>
+                        <div class="card precipitation">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/weather.png') }}" alt="wind speed" class="weather--icons"/>
+                                <p>10mm</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Precipitation</p>
+                                <p>will be at 10mm</p>
+                            </div>
+                        </div>
+                        <div class="card air-quality">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/air-flow.png') }}" alt="wind speed" class="weather--icons"/>
+                                <p>10/500</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Air quality Index</p>
+                                <p>is good at 10/500</p>
+                            </div>
+                        </div>
+                        <div class="card uv-index">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/sunburn.png') }}" alt="wind speed" class="weather--icons"/>
+                                <p>01/10</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">UV index</p>
+                                <p>is very low</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </section>
 </body>
