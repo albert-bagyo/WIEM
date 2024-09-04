@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WIEM</title>
@@ -13,21 +16,56 @@
             <img src="#"/>
             <p>Weather Station</p>
         </div>
-        <div class="nav-links">
-            <p>Home</p>
+        <!-- <div class="nav-links">
+            <p>Home</p> -->
         </div>
-        <div class="time">
-            <p>09:46 AM</p>
-        </div>
-        <div class="date">
-            <p>29 Dec 2023</p>
-        </div>
-        <div class="greetings">
-            <p>Hey! Ghana</p>
-        </div>
-        <div class="search">
-            <input type="search" placeholder="type a city...">
-        </div>
+        <section class="time--date">
+            <div class="time">
+                <p>09:46 AM</p>
+            </div>
+            <div class="date">
+                <p>29 Dec 2023</p>
+            </div>
+        </section>
+        <section class="aside">
+            <div class="greetings">
+                <p>Hey! Ghana</p>
+            </div>
+            <div class="search">
+                <input type="search" placeholder="type a city...">
+            </div>
+        </section>
     </nav>
+    <section class="content">
+        <section class="content--left">
+            <header>
+                <h2>Stormy</h2>
+                <h4>with Heavy Rain</h4>
+            </header>
+            <main class="info">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus blanditiis adipisci atque dolores molestias nihil saepe ut, cumque, quaerat fuga exercitationem amet accusantium mollitia fugiat non corrupti, commodi pariatur maxime!
+            </main>
+            <section class="cities">
+                <div class="city city--one">
+                    <p class="temp">12<sup>o</sup></p>
+                    <p class="wind">40.0NW</p>
+                    <p>Kumasi</p>
+                </div>
+                <div class="city city--two">
+                    <p class="temp">17<sup>o</sup></p>
+                    <p class="wind">40.0NW</p>
+                    <p>Sunyani</p>
+                </div>
+                <div class="city city--three">
+                    <p class="temp">22<sup>o</sup></p>
+                    <p class="wind">40.0NW</p>
+                    <p class="">Tamale</p>
+                </div>
+            </section>
+        </section>
+        <section class="content--right">
+
+        </section>
+    </section>
 </body>
 </html>
