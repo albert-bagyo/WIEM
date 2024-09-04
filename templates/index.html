@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WIEM</title>
 </head>
 <body>
-    <!-- <img src="{{ url_for('static', filename='images/test.jpg') }}" class="image" /> -->
     <nav class="nav--bar">
         <div class="logo">
             <img src="#"/>
@@ -29,5 +32,68 @@
             <input type="search" placeholder="type a city...">
         </div>
     </nav>
+    <section class="content">
+        <section class="content-left">
+
+        </section>
+        <section class="content-right">
+            <div class="weather--data">
+                <div class="temp--condition">
+                    <div class="condition">
+                        <p>31.99N</p>
+                        <p>Excellent</p>
+                    </div>
+                    <div class="temperature">
+                        <h1>27°</h1>
+                        <span>+/-</span>
+                    </div>
+                </div>
+                <div class="weather--details">
+                    <div class="intensity">
+                        <p><em>intensity</em></p>
+                        <p><em>zones</em></p>
+                    </div>
+                    <div class="description">
+                        <p>WIND: WSW 6 MPH</p>
+                        <p>UV INDEX: 0 OF 10</p>
+                        <p>-ACCRA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="other-weather-info">
+                <div class="temp--percent">
+                        <i></i>
+                        <p>9.8%</p>
+                </div>
+                <div class="weather-type">
+                    <div class="info">
+                        <div class=" card humidity">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/humidity.png') }}" alt="humidity" class="weather--icons"/>
+                                <p>65%</p>
+                            </div>
+                            <p>Humidity</p>
+                        </div>
+                        <div class="card wind-speed">
+                            <img src="{{ url_for('static', filename='images/wind.png') }}" alt="wind speed" class="weather--icons"/>
+                            <p>10 MPH</p>
+                            <p>Wind speed</p>
+                        </div>
+                        <div class="card sunrise-sunset">
+                            <div class="sunrise">
+                                <img src="{{ url_for('static', filename='images/sun.png') }}" alt="sun image" class="weather--icons"/>
+                                <p>06:30 AM</p>
+                                <p>Sunrise</p>
+                            </div>
+                            <div class="card sunset">
+                                <i></i>
+                                <p>18:30 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
 </body>
 </html>

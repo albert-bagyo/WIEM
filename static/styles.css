@@ -17,6 +17,9 @@ body {
     box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.3);
     width: 100%;
     height: 100vh;
+    font-family: 'Raleway', sans-serif;
+    padding: 0 4em;
+    color: #fff;
 }
 
 .nav--bar {
@@ -24,10 +27,149 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2em;
+    padding: 2em 0;
 }
 
 .logo {
     display: flex;
     gap: .5em;
+}
+
+.content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content .content-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.weather--data {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.temp--condition {
+    display: flex;
+    align-items: baseline;
+    gap: 2em;
+}
+
+.temp--condition .condition{
+    position: relative;
+    top: -20px;
+}
+
+.temp--condition .condition p {
+    border-radius: 20px;
+    text-align: center;
+    padding: .5em;
+    font-size: .75rem;
+    font-weight: 600;
+}
+
+.temp--condition .condition p:first-child {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: .5em;
+}
+
+.temp--condition .condition p:last-child {
+    background-color: rgb(2, 2, 56);
+    /* padding: .5em; */
+}
+
+.weather--details {
+    display: flex;
+    align-items: baseline;
+    gap: 4.5em;
+
+}
+
+.weather--details .intensity {
+    align-self: flex-end;
+}
+
+.temperature {
+    display: flex;
+    align-items: baseline;
+}
+
+.temperature h1 {
+    font-size: 8em;
+}
+
+.temperature span {
+    font-size: 2em;
+    font-weight: normal;
+    letter-spacing: -5px;
+    margin-left: -1em;
+}
+
+.description p {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.other-weather-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.other-weather-info .weather-type {
+    display: flex;
+    gap: 2em;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icons {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+.info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1em;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* padding: .7em; */
+    border-radius: 10px;
+    text-align: center;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.card--flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5em;
+}
+
+.weather--icons {
+    width: 30px;
 }
