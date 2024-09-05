@@ -32,8 +32,17 @@
             <div class="greetings">
                 <p>Hey! Ghana</p>
             </div>
-            <div class="search">
+            <!-- <div class="search">
                 <input type="search" placeholder="type a city...">
+            </div> -->
+            <div class="dropdown-container">
+                <input type="text" id="dropdownInput" onkeyup="filterFunction()" placeholder="Search for fruits...">
+                <div id="dropdownList" class="dropdown-content">
+                    <!-- Flask will inject the options here -->
+                    {% for country in countries %}
+                    <a href="#">{{ country }}</a>
+                    {% endfor %}
+                </div>
             </div>
         </section>
     </nav>
@@ -156,5 +165,43 @@
             </div>
         </section>
     </section>
+
+    <script>
+        // Toggle the dropdown content visibility when the input is focused
+        document.getElementById('dropdownInput').addEventListener('focus', function () {
+            document.getElementById('dropdownList').classList.add('show');
+        });
+
+        // Close the dropdown when clicking outside of it
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.dropdown-container')) {
+                document.getElementById('dropdownList').classList.remove('show');
+            }
+        });
+
+        // Filter function for searching items in the dropdown
+        function filterFunction() {
+            var input, filter, a, i, div;
+            input = document.getElementById("dropdownInput");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("dropdownList");
+            a = div.getElementsByTagName("a");
+
+            // Loop through all the dropdown links and hide those that don't match the search query
+            for (i = 0; i < a.length; i++) {
+                if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    a[i].style.display = "";
+                } else {
+                    a[i].style.display = "none";
+                }
+            }
+        }
+
+        function selectCountry(country) {
+            document.getElementById("dropdownInput").value = country;
+            document.getElementById("dropdownList").classList.remove('show');
+            getWeather(country);
+        }
+    </script>
 </body>
 </html>
