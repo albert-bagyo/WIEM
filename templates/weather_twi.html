@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIEM</title>
     <script>
         function handleSearch(event) {
             // Check if Enter key is pressed
@@ -25,11 +26,10 @@
                 const baseUrl = `${window.location.origin}`;
 
                 // Redirect to the URL with the search query as a parameter
-                window.location.href = `${baseUrl}/weather/${encodeURIComponent(query)}/en`;
+                window.location.href = `${baseUrl}/weather/${encodeURIComponent(query)}/tw`;
             }
         }
     </script>
-    <title>WIEM</title>
 </head>
 <body>
     <img src="{{ url_for('static', filename='images/weather-icons/Day-Clear.png')}}" alt="clear day" class="weather--image"/>
@@ -48,10 +48,19 @@
         </section>
         <section class="aside">
             <div class="greetings">
-                <p>Hey! {{location}}</p>
+                <p>Akwaaba! {{location}}</p>
             </div>
             <div class="search">
-                <input type="search" placeholder="Search..." onkeypress="handleSearch(event)">
+                <details>
+                    <summary>
+                        Countries
+                    </summary>
+                    <p><a href="/weather/Ghana/tw">Ghana</a></p>
+                    <p><a href="/weather/Nigeria/tw">Nigeria</a></p>
+                    <p><a href="/weather/Namibia/tw">Namibia</a></p>
+                    <p><a href="/weather/Togo/tw">Togo</a></p>
+                </details>
+                <!--<input type="search" placeholder="Search..." onkeypress="handleSearch(event)"--> 
             </div>
         </section>
     </nav>
@@ -96,12 +105,12 @@
                 </div>
                 <div class="weather--details">
                     <div class="intensity">
-                        <p><em>intensity</em></p>
+                        <p><em>ahoɔden</em></p>
                         <p><em>zones</em></p>
                     </div>
                     <div class="description">
                         <p>WIND: WSW 6 MPH</p>
-                        <p>UV INDEX: 0 OF 10</p>
+                        <p>UV INDEX: 0 FIRI 10</p>
                         <p>-{{location}}</p>
                     </div>
                 </div>
@@ -115,8 +124,8 @@
                                 <p>{{weather['main']['humidity'] }}%</p>
                             </div>
                             <div class="card--info">
-                                <p class="card--text">Humidity</p>
-                                <p>will be {{weather['main']['humidity'] }}%</p>
+                                <p class="card--text">Nsuframa</p>
+                                <p>bɛyɛ {{weather['main']['humidity'] }}%</p>
                             </div>
                         </div>
                         <div class="card wind-speed">
@@ -125,8 +134,8 @@
                                 <p>{{weather['wind']['speed'] }}MPH</p>
                             </div>
                             <div class="card--info">
-                                <p class="card--text">Wind speed</p>
-                                <p>will be {{weather['wind']['speed'] }}MPH</p>
+                                <p class="card--text">mframa ɔhare</p>
+                                <p>bɛyɛ {{weather['wind']['speed'] }}MPH</p>
                             </div>
                         </div>
                         <div class="card sunrise-sunset">
@@ -135,8 +144,8 @@
                                 <p>06:30AM</p>
                             </div>
                             <div class="card--info">
-                                <p class="card--text">Sunrise</p>
-                                <p>at 6:30AM</p>
+                                <p class="card--text">Owia apuei</p>
+                                <p>wɔ 6:30AM</p>
                             </div>
                         </div>
                         <div class="card precipitation">
@@ -145,8 +154,8 @@
                                 <p>{{weather['main']['pressure']}}Pa</p>
                             </div>
                             <div class="card--info">
-                                <p class="card--text">Pressure</p>
-                                <p>will be at {{weather['main']['pressure'] + 0.2}}Pa</p>
+                                <p class="card--text">Nhyɛsoɔ</p>
+                                <p>bɛyɛ {{weather['main']['pressure'] + 0.2}}Pa</p>
                             </div>
                         </div>
                         <div class="card air-quality">
@@ -155,8 +164,8 @@
                                 <p>{{weather['visibility']/100}}</p>
                             </div>
                             <div class="card--info">
-                                <p class="card--text">Visibility</p>
-                                <p>is good</p>
+                                <p class="card--text">Aniso dahɔ</p>
+                                <p>ɛyɛ</p>
                             </div>
                         </div>
                         <div class="card uv-index">
@@ -165,8 +174,8 @@
                                 <p>{{"{:.1f}".format(weather['main']['feels_like'] - 273)}}</p>
                             </div>
                             <div class="card--info">
-                                <p class="card--text">Feels like</p>
-                                <p>is good</p>
+                                <p class="card--text">Te nka sɛ</p>
+                                <p>ɛyɛ</p>
                             </div>
                         </div>
                     </div>
