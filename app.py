@@ -6,6 +6,7 @@ from pprint import pprint
 from datetime import datetime
 import random
 
+
 try:
     config = open('config.json', 'r')
     API_KEY = json.load(config)["API_KEY"]
