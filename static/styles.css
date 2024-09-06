@@ -23,14 +23,15 @@
 body {
     /* background: url("./images/test.jpg") center center / cover no-repeat; */
     background: var(--stormy);
-    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 0 5000px rgba(0, 0, 0, 0.3);
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     font-family: 'Raleway', sans-serif;
     padding: 0 4em;
     color: #fff;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    z-index: -99;
 }
 
 .clear-sky {
@@ -81,6 +82,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: -1;
 
 }
 
@@ -91,6 +93,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 2em 0;
+    font-weight: 500;
 }
 
 .logo {
@@ -306,6 +309,13 @@ body {
 .description--weather {
     width: 70%;
     text-align: justify;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 1em;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    z-index: 1;
 }
 
 .content .content-right {
@@ -323,6 +333,15 @@ body {
     flex-direction: column;
     gap: 0 1em;
     /* border: 1px solid red; */
+}
+
+.city p {
+    line-height: 1.5;
+}
+
+.city .temp {
+    font-size: 1.5rem;
+    font-weight: 500;
 }
 
 .temp--condition {
@@ -436,6 +455,14 @@ body {
     flex-direction: column;
     justify-content: space-between;
     gap: .5em;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+.card:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border: .5px solid rgba(255, 255, 255, 0.3);
 }
 
 .card--flex {
