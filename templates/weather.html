@@ -11,31 +11,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        function handleSearch(event) {
-            // Check if Enter key is pressed
-            if (event.key === 'Enter') {
-                // Prevent default form submission behavior
-                event.preventDefault();
-
-                // Get the input value
-                const query = event.target.value;
-
-                // Define the base URL for search
-                const baseUrl = `${window.location.origin}`;
-
-                // Redirect to the URL with the search query as a parameter
-                window.location.href = `${baseUrl}/weather/${encodeURIComponent(query)}/en`;
-            }
-        }
-    </script>
     <title>WIEM</title>
 </head>
 <body>
     <img src="{{ url_for('static', filename='images/weather-icons/Day-Clear.png')}}" alt="clear day" class="weather--image"/>
     <nav class="nav--bar">
         <div class="logo">
-            <img src="{{ url_for('static', filename='images/weather.png')}}" alt="logo" id="logo"/>
+            <img src="{{ url_for('static', filename='images/clouds.png')}}" alt="logo" id="logo"/>
             <p>Weather Station</p>
         </div>
         <section class="time--date">
@@ -48,10 +30,18 @@
         </section>
         <section class="aside">
             <div class="greetings">
-                <p>Hey! {{location}}</p>
+                <p>Welcome to <br> {{location}}</p>
             </div>
             <div class="search">
-                <input type="search" placeholder="Search..." onkeypress="handleSearch(event)">
+                <div class="dropdown-container">
+                    <input type="search" id="dropdownInput" onkeyup="filterFunction()" placeholder="Search for countries...">
+                    <div id="dropdownList" class="dropdown-content">
+                        {% for country in countries %}
+                        <a href="/weather/{{ country }}/tw#" onclick="selectCountry('{{ country }}')">{{ country }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!--<input type="search" placeholder="Search..." onkeypress="handleSearch(event)"--> 
             </div>
         </section>
     </nav>
@@ -61,25 +51,17 @@
                 <h2>{{weather_main}}</h2>
                 <h4>{{weather_desc}}</h4>
             </header>
-            <main class="info">
+            <main class="description--weather">
                 {{description}}
             </main>
             <section class="cities">
-                <div class="city city--one">
-                    <p class="temp">12<sup>o</sup></p>
-                    <p class="wind">40.0NW</p>
-                    <p>Kumasi</p>
+                {% for city_weather in cities_weather %}
+                <div class="city">
+                    <p class="temp">{{ city_weather.temperature }}°C</p>
+                    <p class="wind">{{ city_weather.wind_direction }}</p>
+                    <p>{{ city_weather.city }}</p>
                 </div>
-                <div class="city city--two">
-                    <p class="temp">17<sup>o</sup></p>
-                    <p class="wind">40.0NW</p>
-                    <p>Sunyani</p>
-                </div>
-                <div class="city city--three">
-                    <p class="temp">22<sup>o</sup></p>
-                    <p class="wind">40.0NW</p>
-                    <p>Tamale</p>
-                </div>
+                {% endfor %}
             </section>
         </section>
         <section class="content-right">
@@ -174,5 +156,83 @@
             </div>
         </section>
     </section>
+
+    <script>
+        // Toggle the dropdown content visibility when the input is focused
+        document.getElementById('dropdownInput').addEventListener('focus', function () {
+            document.getElementById('dropdownList').classList.add('show');
+        });
+
+        // Close the dropdown when clicking outside of it
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.dropdown-container')) {
+                document.getElementById('dropdownList').classList.remove('show');
+            }
+        });
+
+        // Filter function for searching items in the dropdown
+        function filterFunction() {
+            var input, filter, a, i, div;
+            input = document.getElementById("dropdownInput");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("dropdownList");
+            a = div.getElementsByTagName("a");
+
+            // Loop through all the dropdown links and hide those that don't match the search query
+            for (i = 0; i < a.length; i++) {
+                if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    a[i].style.display = "";
+                } else {
+                    a[i].style.display = "none";
+                }
+            }
+        }
+
+        // When a country is selected from the dropdown, fill the input box
+        function selectCountry(country) {
+            document.getElementById("dropdownInput").value = country;
+            document.getElementById("dropdownList").classList.remove('show');
+            getWeather(country);
+        }
+        
+        // Function to get weather data for the selected country
+        function getWeather(country) {
+            // Get the current URL's pathname
+            const currentPath = window.location.pathname;
+
+            // Split the path into segments
+            const segments = currentPath.split('/');
+
+            // Find the index of 'weather' in the segments
+            const weatherIndex = segments.indexOf('weather');
+
+            // If 'weather' is found and there's a segment after it, replace that segment
+            if (weatherIndex !== -1 && weatherIndex + 1 < segments.length) {
+                segments[weatherIndex + 1] = encodeURIComponent(country);
+            }
+            
+            // Join the segments back into a path
+            const newPath = segments.join('/');
+
+            // Construct the new URL with the original origin and the new path
+            const newUrl = `${window.location.origin}${newPath}${window.location.hash}`;
+
+            // Redirect to the updated URL
+            window.location.href = newUrl;
+        }
+            
+            // Event listener for dropdown change
+        document.getElementById('countrySelect').addEventListener('change', function() {
+            handleWeatherRequest(this.value);
+        });
+
+        // Event listener for Enter key press
+        document.getElementById('countrySelect').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission if it's within a form
+                handleWeatherRequest(this.value);
+            }
+        });
+    </script>
 </body>
 </html>
