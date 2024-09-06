@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 import requests
 import pyowm
 import json
@@ -16,8 +16,148 @@ finally:
 
 app = Flask(__name__)
 
+african_countries = [
+        "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi",
+        "Cabo Verde", "Cameroon", "Central African Republic", "Chad", "Comoros",
+        "Congo (Congo-Brazzaville)", "Democratic Republic of the Congo", "Djibouti",
+        "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini (fmr. Swaziland)", "Ethiopia",
+        "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya",
+        "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania",
+        "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda",
+        "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia",
+        "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda",
+        "Zambia", "Zimbabwe"
+    ]
+
+weather_descriptions = {
+        200: "Thunderstorm with light rain",
+        201: "Thunderstorm with rain",
+        202: "Thunderstorm with heavy rain",
+        210: "Light thunderstorm",
+        211: "Thunderstorm",
+        212: "Heavy thunderstorm",
+        221: "Ragged thunderstorm",
+        230: "Thunderstorm with light drizzle",
+        231: "Thunderstorm with drizzle",
+        232: "Thunderstorm with heavy drizzle",
+
+        300: "Light intensity drizzle",
+        301: "Drizzle",
+        302: "Heavy intensity drizzle",
+        310: "Light intensity drizzle rain",
+        311: "Drizzle rain",
+        312: "Heavy intensity drizzle rain",
+        313: "Shower rain and drizzle",
+        314: "Heavy shower rain and drizzle",
+        321: "Shower drizzle",
+
+        500: "Light rain",
+        501: "Moderate rain",
+        502: "Heavy intensity rain",
+        503: "Very heavy rain",
+        504: "Extreme rain",
+        511: "Freezing rain",
+        520: "Light intensity shower rain",
+        521: "Shower rain",
+        522: "Heavy intensity shower rain",
+        531: "Ragged shower rain",
+
+        600: "Light snow",
+        601: "Snow",
+        602: "Heavy snow",
+        611: "Sleet",
+        612: "Light shower sleet",
+        613: "Shower sleet",
+        615: "Light rain and snow",
+        616: "Rain and snow",
+        620: "Light shower snow",
+        621: "Shower snow",
+        622: "Heavy shower snow",
+
+        701: "Mist",
+        711: "Smoke",
+        721: "Haze",
+        731: "Sand/dust whirls",
+        741: "Fog",
+        751: "Sand",
+        761: "Dust",
+        762: "Volcanic ash",
+        771: "Squalls",
+        781: "Tornado",
+
+        800: "Clear sky",
+        801: "Few clouds",
+        802: "Scattered clouds",
+        803: "Broken clouds",
+        804: "Overcast clouds"
+    }
+
+backgrounds = {
+    200: "Storm-Day",
+    201: "Storm-Night",
+    202: "Storm-Day",
+    210: "Storm-Day",
+    211: "Thunderstorm",
+    212: "Storm-Night",
+    221: "Storm-Night",
+    230: "Storm-Day",
+    231: "Storm-Night",
+    232: "Storm-Night",
+
+    300: "Rain-Raindrops",
+    301: "Raindrops",
+    302: "Raindrops",
+    310: "Rain-Raindrops",
+    311: "Raindrops",
+    312: "Rain",
+    313: "Rain",
+    314: "Rain",
+    321: "Rain",
+
+    500: "Raindrops",
+    501: "Raindrops",
+    502: "Rain",
+    503: "Rain",
+    504: "Rain",
+    511: "Freezing",
+    520: "Rain",
+    521: "Rain",
+    522: "Rain",
+    531: "Rain",
+
+    600: "Snow",
+    601: "Snow",
+    602: "Freeze",
+    611: "Sleet",
+    612: "Sleet",
+    613: "Sleet",
+    615: "Snow",
+    616: "Snow",
+    620: "Snow",
+    621: "Snow",
+    622: "Snow",
+
+    701: "Fog",
+    711: "Smog",
+    721: "Haze",
+    731: "Dust",
+    741: "Fog",
+    751: "Dust",
+    761: "Dust",
+    762: "Smog",
+    771: "Squalls",
+    781: "Tornado",
+
+    800: "Day-Clear",
+    801: "Partly-cloudy",
+    802: "Partly-cloudy",
+    803: "Cloudy",
+    804: "Cloudy"
+}
+
 @app.route('/')
 def index():
+    
     return redirect('/weather/ghana/tw')
 
 @app.route('/translate/<text>')
@@ -51,12 +191,6 @@ def tts(lang):
 
 @app.route('/weather/<place>/<lang>')
 def weather(place,lang):
-    #owm = pyowm.OWM(f"{API_KEY}")
-    #m = owm.weather_manager()
-    
-    #w = m.weather_at_place(place).weather
-    #wind = w.wind()
-    #humidity = w.humidity
     today = datetime.now()
     time = today.strftime('%I : %M %p')
     date = today.strftime("%d %b %Y")
@@ -73,14 +207,24 @@ def weather(place,lang):
     description = generate_description(out,place)
     w_m = out['weather'][0]['main']
     w_d = out['weather'][0]['description']
+    w_id = out['weather'][0]['id']
     temp = 'weather.html'
+
+    background = backgrounds.get(w_id, "default-bg")
+
+    if background == 'Rain':
+        condition = '--rain'
+    elif background == 'Snow':
+        condition = '--snow'
+    elif background == 'Clear sky':
+        condition = '--clear'
     if lang == 'tw':
         description = translate(description)
         w_m = translate(w_m)
         w_d = translate(w_d)
         temp = 'weather_twi.html'
     #description = get_wikipedia_description(place)
-    return render_template(temp,weather = out, time= time,date= date,location= place.capitalize(),description= description,weather_desc =w_d,weather_main =w_m )
+    return render_template(temp,weather = out, time= time,date= date,location= place.capitalize(),description= description,weather_desc =w_d,weather_main =w_m, countries=african_countries, background=background)
 
 def generate_description(weather,location):
     

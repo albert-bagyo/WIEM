@@ -12,30 +12,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WIEM</title>
-    <script>
-        function handleSearch(event) {
-            // Check if Enter key is pressed
-            if (event.key === 'Enter') {
-                // Prevent default form submission behavior
-                event.preventDefault();
-
-                // Get the input value
-                const query = event.target.value;
-
-                // Define the base URL for search
-                const baseUrl = `${window.location.origin}`;
-
-                // Redirect to the URL with the search query as a parameter
-                window.location.href = `${baseUrl}/weather/${encodeURIComponent(query)}/tw`;
-            }
-        }
-    </script>
 </head>
-<body>
-    <img src="{{ url_for('static', filename='images/weather-icons/Day-Clear.png')}}" alt="clear day" class="weather--image"/>
+<body class = {{ condition }}>
+    <img src="{{ url_for('static', filename='images/weather-icons/' ~ background ~ '.png') }}" alt="clear day" class="weather--image"/>
     <nav class="nav--bar">
         <div class="logo">
-            <img src="{{ url_for('static', filename='images/weather.png')}}" alt="logo" id="logo"/>
+            <img src="{{ url_for('static', filename='images/clouds.png')}}" alt="logo" id="logo"/>
             <p>Weather Station</p>
         </div>
         <section class="time--date">
@@ -48,18 +30,17 @@
         </section>
         <section class="aside">
             <div class="greetings">
-                <p>Akwaaba! {{location}}</p>
+                <p>Akwaaba! to <br> {{location}}</p>
             </div>
             <div class="search">
-                <details>
-                    <summary>
-                        Countries
-                    </summary>
-                    <p><a href="/weather/Ghana/tw">Ghana</a></p>
-                    <p><a href="/weather/Nigeria/tw">Nigeria</a></p>
-                    <p><a href="/weather/Namibia/tw">Namibia</a></p>
-                    <p><a href="/weather/Togo/tw">Togo</a></p>
-                </details>
+                <div class="dropdown-container">
+                    <input type="search" id="dropdownInput" onkeyup="filterFunction()" placeholder="Search for countries...">
+                    <div id="dropdownList" class="dropdown-content">
+                        {% for country in countries %}
+                        <a href="/weather/{{ country }}/tw#" onclick="selectCountry('{{ country }}')">{{ country }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
                 <!--<input type="search" placeholder="Search..." onkeypress="handleSearch(event)"--> 
             </div>
         </section>
@@ -70,7 +51,7 @@
                 <h2>{{weather_main}}</h2>
                 <h4>{{weather_desc}}</h4>
             </header>
-            <main class="info">
+            <main class="description--weather">
                 {{description}}
             </main>
             <section class="cities">
@@ -183,5 +164,83 @@
             </div>
         </section>
     </section>
+
+    <script>
+        // Toggle the dropdown content visibility when the input is focused
+        document.getElementById('dropdownInput').addEventListener('focus', function () {
+            document.getElementById('dropdownList').classList.add('show');
+        });
+
+        // Close the dropdown when clicking outside of it
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.dropdown-container')) {
+                document.getElementById('dropdownList').classList.remove('show');
+            }
+        });
+
+        // Filter function for searching items in the dropdown
+        function filterFunction() {
+            var input, filter, a, i, div;
+            input = document.getElementById("dropdownInput");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("dropdownList");
+            a = div.getElementsByTagName("a");
+
+            // Loop through all the dropdown links and hide those that don't match the search query
+            for (i = 0; i < a.length; i++) {
+                if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    a[i].style.display = "";
+                } else {
+                    a[i].style.display = "none";
+                }
+            }
+        }
+
+        // When a country is selected from the dropdown, fill the input box
+        function selectCountry(country) {
+            document.getElementById("dropdownInput").value = country;
+            document.getElementById("dropdownList").classList.remove('show');
+            getWeather(country);
+        }
+        
+        // Function to get weather data for the selected country
+    function getWeather(country) {
+        // Get the current URL's pathname
+        const currentPath = window.location.pathname;
+
+        // Split the path into segments
+        const segments = currentPath.split('/');
+
+        // Find the index of 'weather' in the segments
+        const weatherIndex = segments.indexOf('weather');
+
+        // If 'weather' is found and there's a segment after it, replace that segment
+        if (weatherIndex !== -1 && weatherIndex + 1 < segments.length) {
+            segments[weatherIndex + 1] = encodeURIComponent(country);
+        }
+        
+        // Join the segments back into a path
+        const newPath = segments.join('/');
+
+        // Construct the new URL with the original origin and the new path
+        const newUrl = `${window.location.origin}${newPath}${window.location.hash}`;
+
+        // Redirect to the updated URL
+        window.location.href = newUrl;
+    }
+        
+        // Event listener for dropdown change
+    document.getElementById('countrySelect').addEventListener('change', function() {
+        handleWeatherRequest(this.value);
+    });
+
+    // Event listener for Enter key press
+    document.getElementById('countrySelect').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent form submission if it's within a form
+            handleWeatherRequest(this.value);
+        }
+    });
+    </script>
 </body>
 </html>
