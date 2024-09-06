@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIEM</title>
+</head>
+<body class = {{ condition }}>
+    <img src="{{ url_for('static', filename='images/weather-icons/' ~ background ~ '.png') }}" alt="clear day" class="weather--image"/>
+    <nav class="nav--bar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/clouds.png')}}" alt="logo" id="logo"/>
+            <p>Weather Station</p>
+        </div>
+        <section class="time--date">
+            <div class="time">
+                <p>{{time}}</p>
+            </div>
+            <div class="date">
+                <p>{{date}}</p>
+            </div>
+        </section>
+        <section class="aside">
+            <div class="greetings">
+                <p>Akwaaba! to <br> {{location}}</p>
+            </div>
+            <div class="search">
+                <div class="dropdown-container">
+                    <input type="search" id="dropdownInput" onkeyup="filterFunction()" placeholder="Search for countries...">
+                    <div id="dropdownList" class="dropdown-content">
+                        {% for country in countries %}
+                        <a href="/weather/{{ country }}/tw#" onclick="selectCountry('{{ country }}')">{{ country }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!--<input type="search" placeholder="Search..." onkeypress="handleSearch(event)"--> 
+            </div>
+        </section>
+    </nav>
+    <section class="content">
+        <section class="content-left">
+            <header>
+                <h2>{{weather_main}}</h2>
+                <h4>{{weather_desc}}</h4>
+            </header>
+            <main class="description--weather">
+                {{description}}
+            </main>
+            <section class="cities">
+                <div class="city city--one">
+                    <p class="temp">12<sup>o</sup></p>
+                    <p class="wind">40.0NW</p>
+                    <p>Kumasi</p>
+                </div>
+                <div class="city city--two">
+                    <p class="temp">17<sup>o</sup></p>
+                    <p class="wind">40.0NW</p>
+                    <p>Sunyani</p>
+                </div>
+                <div class="city city--three">
+                    <p class="temp">22<sup>o</sup></p>
+                    <p class="wind">40.0NW</p>
+                    <p>Tamale</p>
+                </div>
+            </section>
+        </section>
+        <section class="content-right">
+            <div class="weather--data">
+                <div class="temp--condition">
+                    <div class="condition">
+                        <p>31.99N</p>
+                        <p>Excellent</p>
+                    </div>
+                    <div class="temperature">
+                        <h1>{{"{:.1f}".format(weather['main']['temp'] - 273.15)}}°</h1>
+                        <span>+/-</span>
+                    </div>
+                </div>
+                <div class="weather--details">
+                    <div class="intensity">
+                        <p><em>ahoɔden</em></p>
+                        <p><em>zones</em></p>
+                    </div>
+                    <div class="description">
+                        <p>WIND: WSW 6 MPH</p>
+                        <p>UV INDEX: 0 FIRI 10</p>
+                        <p>-{{location}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="other-weather-info">
+                <div class="weather-type">
+                    <div class="weather-info">
+                        <div class=" card humidity">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/humidity.png') }}" alt="humidity" class="weather--icons"/>
+                                <p>{{weather['main']['humidity'] }}%</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Nsuframa</p>
+                                <p>bɛyɛ {{weather['main']['humidity'] }}%</p>
+                            </div>
+                        </div>
+                        <div class="card wind-speed">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/wind.png') }}" alt="wind speed" class="weather--icons"/>
+                                <p>{{weather['wind']['speed'] }}MPH</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">mframa ɔhare</p>
+                                <p>bɛyɛ {{weather['wind']['speed'] }}MPH</p>
+                            </div>
+                        </div>
+                        <div class="card sunrise-sunset">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/sun.png') }}" alt="sun image" class="weather--icons"/>
+                                <p>06:30AM</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Owia apuei</p>
+                                <p>wɔ 6:30AM</p>
+                            </div>
+                        </div>
+                        <div class="card precipitation">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/weather.png') }}" alt="wind speed" class="weather--icons"/>
+                                <p>{{weather['main']['pressure']}}Pa</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Nhyɛsoɔ</p>
+                                <p>bɛyɛ {{weather['main']['pressure'] + 0.2}}Pa</p>
+                            </div>
+                        </div>
+                        <div class="card air-quality">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/air-flow.png') }}" alt="wind speed" class="weather--icons"/>
+                                <p>{{weather['visibility']/100}}</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Aniso dahɔ</p>
+                                <p>ɛyɛ</p>
+                            </div>
+                        </div>
+                        <div class="card uv-index">
+                            <div class="card--flex">
+                                <img src="{{ url_for('static', filename='images/sunburn.png') }}" alt="wind speed" class="weather--icons"/>
+                                <p>{{"{:.1f}".format(weather['main']['feels_like'] - 273)}}</p>
+                            </div>
+                            <div class="card--info">
+                                <p class="card--text">Te nka sɛ</p>
+                                <p>ɛyɛ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <script>
+        // Toggle the dropdown content visibility when the input is focused
+        document.getElementById('dropdownInput').addEventListener('focus', function () {
+            document.getElementById('dropdownList').classList.add('show');
+        });
+
+        // Close the dropdown when clicking outside of it
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.dropdown-container')) {
+                document.getElementById('dropdownList').classList.remove('show');
+            }
+        });
+
+        // Filter function for searching items in the dropdown
+        function filterFunction() {
+            var input, filter, a, i, div;
+            input = document.getElementById("dropdownInput");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("dropdownList");
+            a = div.getElementsByTagName("a");
+
+            // Loop through all the dropdown links and hide those that don't match the search query
+            for (i = 0; i < a.length; i++) {
+                if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    a[i].style.display = "";
+                } else {
+                    a[i].style.display = "none";
+                }
+            }
+        }
+
+        // When a country is selected from the dropdown, fill the input box
+        function selectCountry(country) {
+            document.getElementById("dropdownInput").value = country;
+            document.getElementById("dropdownList").classList.remove('show');
+            getWeather(country);
+        }
+        
+        // Function to get weather data for the selected country
+    function getWeather(country) {
+        // Get the current URL's pathname
+        const currentPath = window.location.pathname;
+
+        // Split the path into segments
+        const segments = currentPath.split('/');
+
+        // Find the index of 'weather' in the segments
+        const weatherIndex = segments.indexOf('weather');
+
+        // If 'weather' is found and there's a segment after it, replace that segment
+        if (weatherIndex !== -1 && weatherIndex + 1 < segments.length) {
+            segments[weatherIndex + 1] = encodeURIComponent(country);
+        }
+        
+        // Join the segments back into a path
+        const newPath = segments.join('/');
+
+        // Construct the new URL with the original origin and the new path
+        const newUrl = `${window.location.origin}${newPath}${window.location.hash}`;
+
+        // Redirect to the updated URL
+        window.location.href = newUrl;
+    }
+        
+        // Event listener for dropdown change
+    document.getElementById('countrySelect').addEventListener('change', function() {
+        handleWeatherRequest(this.value);
+    });
+
+    // Event listener for Enter key press
+    document.getElementById('countrySelect').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent form submission if it's within a form
+            handleWeatherRequest(this.value);
+        }
+    });
+    </script>
+</body>
+</html>
