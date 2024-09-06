@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 import requests
 import pyowm
 import json
@@ -17,10 +17,207 @@ finally:
 
 app = Flask(__name__)
 
+african_countries = [
+        "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi",
+        "Cabo Verde", "Cameroon", "Central African Republic", "Chad", "Comoros",
+        "Congo (Congo-Brazzaville)", "Democratic Republic of the Congo", "Djibouti",
+        "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini (fmr. Swaziland)", "Ethiopia",
+        "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya",
+        "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania",
+        "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda",
+        "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia",
+        "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda",
+        "Zambia", "Zimbabwe"
+    ]
+
+african_countries_cities = {
+    "Algeria": ["Algiers", "Oran", "Constantine"],
+    "Egypt": ["Cairo", "Alexandria", "Giza"],
+    "Libya": ["Tripoli", "Benghazi", "Misrata"],
+    "Morocco": ["Casablanca", "Rabat", "Marrakech"],
+    "Sudan": ["Khartoum", "Omdurman", "Port Sudan"],
+    "Tunisia": ["Tunis", "Sfax", "Sousse"],
+    "Benin": ["Porto-Novo", "Cotonou", "Parakou"],
+    "Burkina Faso": ["Ouagadougou", "Bobo-Dioulasso", "Koudougou"],
+    "Cape Verde": ["Praia", "Mindelo", "Santa Maria"],
+    "Côte d'Ivoire": ["Abidjan", "Yamoussoukro", "Bouaké"],
+    "Gambia": ["Banjul", "Serekunda", "Brikama"],
+    "Ghana": ["Accra", "Kumasi", "Tamale"],
+    "Guinea": ["Conakry", "Kankan", "Labé"],
+    "Guinea-Bissau": ["Bissau", "Bafatá", "Gabú"],
+    "Liberia": ["Monrovia", "Gbarnga", "Kakata"],
+    "Mali": ["Bamako", "Sikasso", "Mopti"],
+    "Mauritania": ["Nouakchott", "Nouadhibou", "Kiffa"],
+    "Niger": ["Niamey", "Zinder", "Maradi"],
+    "Nigeria": ["Lagos", "Abuja", "Kano"],
+    "Senegal": ["Dakar", "Saint-Louis", "Touba"],
+    "Sierra Leone": ["Freetown", "Bo", "Kenema"],
+    "Togo": ["Lomé", "Sokodé", "Kara"],
+    "Burundi": ["Bujumbura", "Gitega", "Ngozi"],
+    "Comoros": ["Moroni", "Mutsamudu", "Fomboni"],
+    "Djibouti": ["Djibouti City", "Ali Sabieh", "Dikhil"],
+    "Eritrea": ["Asmara", "Keren", "Massawa"],
+    "Ethiopia": ["Addis Ababa", "Dire Dawa", "Mek'ele"],
+    "Kenya": ["Nairobi", "Mombasa", "Kisumu"],
+    "Madagascar": ["Antananarivo", "Toamasina", "Fianarantsoa"],
+    "Malawi": ["Lilongwe", "Blantyre", "Mzuzu"],
+    "Mauritius": ["Port Louis", "Beau Bassin-Rose Hill", "Curepipe"],
+    "Mozambique": ["Maputo", "Beira", "Nampula"],
+    "Rwanda": ["Kigali", "Butare", "Gisenyi"],
+    "Seychelles": ["Victoria", "Anse Boileau", "Bel Ombre"],
+    "Somalia": ["Mogadishu", "Hargeisa", "Kismayo"],
+    "South Sudan": ["Juba", "Malakal", "Wau"],
+    "Tanzania": ["Dar es Salaam", "Dodoma", "Mwanza"],
+    "Uganda": ["Kampala", "Entebbe", "Gulu"],
+    "Zambia": ["Lusaka", "Ndola", "Kitwe"],
+    "Zimbabwe": ["Harare", "Bulawayo", "Chitungwiza"],
+    "Angola": ["Luanda", "Huambo", "Lobito"],
+    "Cameroon": ["Yaoundé", "Douala", "Garoua"],
+    "Central African Republic": ["Bangui", "Bimbo", "Berbérati"],
+    "Chad": ["N'Djamena", "Moundou", "Sarh"],
+    "Congo (Brazzaville)": ["Brazzaville", "Pointe-Noire", "Dolisie"],
+    "Democratic Republic of the Congo (DRC)": ["Kinshasa", "Lubumbashi", "Mbuji-Mayi"],
+    "Equatorial Guinea": ["Malabo", "Bata", "Ebebiyin"],
+    "Gabon": ["Libreville", "Port-Gentil", "Franceville"],
+    "São Tomé and Príncipe": ["São Tomé", "Santo António", "Neves"],
+    "Botswana": ["Gaborone", "Francistown", "Maun"],
+    "Eswatini (Swaziland)": ["Mbabane", "Manzini", "Big Bend"],
+    "Lesotho": ["Maseru", "Teyateyaneng", "Mafeteng"],
+    "Namibia": ["Windhoek", "Walvis Bay", "Swakopmund"],
+    "South Africa": ["Johannesburg", "Cape Town", "Durban"]
+}
+
+weather_descriptions = {
+        200: "Thunderstorm with light rain",
+        201: "Thunderstorm with rain",
+        202: "Thunderstorm with heavy rain",
+        210: "Light thunderstorm",
+        211: "Thunderstorm",
+        212: "Heavy thunderstorm",
+        221: "Ragged thunderstorm",
+        230: "Thunderstorm with light drizzle",
+        231: "Thunderstorm with drizzle",
+        232: "Thunderstorm with heavy drizzle",
+
+        300: "Light intensity drizzle",
+        301: "Drizzle",
+        302: "Heavy intensity drizzle",
+        310: "Light intensity drizzle rain",
+        311: "Drizzle rain",
+        312: "Heavy intensity drizzle rain",
+        313: "Shower rain and drizzle",
+        314: "Heavy shower rain and drizzle",
+        321: "Shower drizzle",
+
+        500: "Light rain",
+        501: "Moderate rain",
+        502: "Heavy intensity rain",
+        503: "Very heavy rain",
+        504: "Extreme rain",
+        511: "Freezing rain",
+        520: "Light intensity shower rain",
+        521: "Shower rain",
+        522: "Heavy intensity shower rain",
+        531: "Ragged shower rain",
+
+        600: "Light snow",
+        601: "Snow",
+        602: "Heavy snow",
+        611: "Sleet",
+        612: "Light shower sleet",
+        613: "Shower sleet",
+        615: "Light rain and snow",
+        616: "Rain and snow",
+        620: "Light shower snow",
+        621: "Shower snow",
+        622: "Heavy shower snow",
+
+        701: "Mist",
+        711: "Smoke",
+        721: "Haze",
+        731: "Sand/dust whirls",
+        741: "Fog",
+        751: "Sand",
+        761: "Dust",
+        762: "Volcanic ash",
+        771: "Squalls",
+        781: "Tornado",
+
+        800: "Clear sky",
+        801: "Few clouds",
+        802: "Scattered clouds",
+        803: "Broken clouds",
+        804: "Overcast clouds"
+    }
+
+backgrounds = {
+    200: "Storm-Day",
+    201: "Storm-Night",
+    202: "Storm-Day",
+    210: "Storm-Day",
+    211: "Storm",
+    212: "Storm-Night",
+    221: "Storm-Night",
+    230: "Storm-Day",
+    231: "Storm-Night",
+    232: "Storm-Night",
+
+    300: "Rain-Raindrops",
+    301: "Raindrops",
+    302: "Raindrops",
+    310: "Rain-Raindrops",
+    311: "Raindrops",
+    312: "Rain",
+    313: "Rain",
+    314: "Rain",
+    321: "Rain",
+
+    500: "Raindrops",
+    501: "Raindrops",
+    502: "Rain",
+    503: "Rain",
+    504: "Rain",
+    511: "Freezing",
+    520: "Rain",
+    521: "Rain",
+    522: "Rain",
+    531: "Rain",
+
+    600: "Snow",
+    601: "Snow",
+    602: "Freeze",
+    611: "Sleet",
+    612: "Sleet",
+    613: "Sleet",
+    615: "Snow",
+    616: "Snow",
+    620: "Snow",
+    621: "Snow",
+    622: "Snow",
+
+    701: "Fog",
+    711: "Smog",
+    721: "Haze",
+    731: "Dust",
+    741: "Fog",
+    751: "Dust",
+    761: "Dust",
+    762: "Smog",
+    771: "Squalls",
+    781: "Tornado",
+
+    800: "Day-Clear",
+    801: "Partly-cloudy",
+    802: "Partly-cloudy",
+    803: "Cloudy",
+    804: "Cloudy"
+}
+
+
 @app.route('/')
 def index():
     
-    return render_template('index.html')
+    return redirect('/weather/ghana/tw')
 
 @app.route('/translate/<text>')
 def translate(text):
@@ -53,15 +250,67 @@ def tts(lang):
 
 @app.route('/weather/<place>/<lang>')
 def weather(place,lang):
-    #owm = pyowm.OWM(f"{API_KEY}")
-    #m = owm.weather_manager()
-    
-    #w = m.weather_at_place(place).weather
-    #wind = w.wind()
-    #humidity = w.humidity
     today = datetime.now()
     time = today.strftime('%I : %M %p')
     date = today.strftime("%d %b %Y")
+    
+    cities = african_countries_cities.get(place.capitalize(), [])
+    
+    city_weather_data = []
+    
+    for city in cities:
+        try:
+            r = requests.get(f'http://api.openweathermap.org/data/2.5/weather?q={city}&APPID={API_KEY}&units=metric')  # Fetch in Celsius
+            out = r.json()
+            if out['cod'] != 200:
+                raise Exception('wrong response')
+        except Exception as err:
+            print(f"Error fetching weather for {city}: {err}")
+            continue
+        
+        # Get necessary weather data
+        temperature = out['main']['temp']
+        degree = out['wind']['deg']
+        
+        if degree >= 348.75 or degree < 11.25:
+            wind_direction = f"{degree} N"
+        elif degree < 33.75:
+            wind_direction = f"{degree} NNE"
+        elif degree < 56.25:
+            wind_direction = f"{degree} NE"
+        elif degree < 78.75:
+            wind_direction = f"{degree} ENE"
+        elif degree < 101.25:
+            wind_direction = f"{degree} E"
+        elif degree < 123.75:
+            wind_direction = f"{degree} ESE"
+        elif degree < 146.25:
+            wind_direction = f"{degree} SE"
+        elif degree < 168.75:
+            wind_direction = f"{degree} SSE"
+        elif degree < 191.25:
+            wind_direction = f"{degree} S"
+        elif degree < 213.75:
+            wind_direction = f"{degree} SSW"
+        elif degree < 236.25:
+            wind_direction = f"{degree} SW"
+        elif degree < 258.75:
+            wind_direction = f"{degree} WSW"
+        elif degree < 281.25:
+            wind_direction = f"{degree} W"
+        elif degree < 303.75:
+            wind_direction = f"{degree} WNW"
+        elif degree < 326.25:
+            wind_direction = f"{degree} NW"
+        else:
+            wind_direction = f"{degree} NNW"
+            
+        city_weather_data.append({
+            'city': city,
+            'temperature': temperature,
+            'wind_direction': wind_direction
+        })
+
     try:
         #r = requests.get(f'http://api.openweathermap.org/data/2.5/forecast?id=524901&appid={API_KEY}')
         r = requests.get(f'http://api.openweathermap.org/data/2.5/weather?q={place}&APPID={API_KEY}')
@@ -75,14 +324,46 @@ def weather(place,lang):
     description = generate_description(out,place)
     w_m = out['weather'][0]['main']
     w_d = out['weather'][0]['description']
+    w_id = out['weather'][0]['id']
     temp = 'weather.html'
+
+    background = backgrounds.get(w_id, "default-bg")
+
+    if w_id >= int('200') and w_id <= int('232'):
+        condition = 'stormy'
+    elif w_id >= int('300') and w_id <= int('321'):
+        condition = 'rainy'
+    elif w_id >= int('500') and w_id <= int('531'):
+        condition = 'rainy'
+    elif w_id >= int('600') and w_id <= int('622'):
+        condition = 'snowy'
+    elif w_id >= int('700') and w_id <= int('781'):
+        condition = 'foggy'
+    elif w_id >= int('801') and w_id <= int('804'):
+        condition = 'cloudy'
+    else:
+        condition = 'clear-sky'
+    
+
     if lang == 'tw':
         description = translate(description)
         w_m = translate(w_m)
         w_d = translate(w_d)
         temp = 'weather_twi.html'
     #description = get_wikipedia_description(place)
-    return render_template(temp,weather = out, time= time,date= date,location= place.capitalize(),description= description,weather_desc =w_d,weather_main =w_m )
+    return render_template(
+        temp,
+        weather = out, 
+        time= time,date= 
+        date,location= place.capitalize(),
+        description= description,
+        weather_desc =w_d,
+        weather_main =w_m, 
+        countries=african_countries, 
+        background=background,
+        condition=condition,
+        cities_weather=city_weather_data
+    )
 
 def generate_description(weather,location):
     

@@ -23,15 +23,57 @@
 body {
     /* background: url("./images/test.jpg") center center / cover no-repeat; */
     background: var(--stormy);
-    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 0 5000px rgba(0, 0, 0, 0.3);
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     font-family: 'Raleway', sans-serif;
     padding: 0 4em;
     color: #fff;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    z-index: -99;
 }
+
+.clear-sky {
+    background: var(--clear-sky);
+}
+
+.partly-cloudy {
+    background: var(--partly-cloudy);
+}
+
+.cloudy {
+    background: var(--cloudy);
+}
+
+.rainy {
+    background: var(--rainy);
+}
+
+.stormy {
+    background: var(--stormy);
+}
+
+.snowy {
+    background: var(--snowy);
+}
+
+.foggy {
+    background: var(--foggy);
+}
+
+.dawn {
+    background: var(--dawn);
+}
+
+.dusk {
+    background: var(--dusk);
+}
+
+.night {
+    background: var(--night);
+}
+
 
 .weather--image {
     width: 45em;
@@ -40,6 +82,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: -1;
 
 }
 
@@ -50,12 +93,15 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 2em 0;
+    font-weight: 500;
 }
 
 .logo {
+    width: 100%;
     display: flex;
     gap: .5em;
     align-items: center;
+    /* border: 1px solid red; */
 }
 
 #logo {
@@ -63,11 +109,13 @@ body {
 }
 
 .time--date{
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-left: 4em;
+    /* margin-left: 4em; */
+    /* border: 1px solid red; */
 }
 
 .time--date .time{
@@ -80,23 +128,90 @@ body {
 }
 
 .aside {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1em;
+    /* border: 1px solid red; */
 }
 
 .search input {
-    width: 300px;
+    width: 100%;
     height: 40px;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 6px;
     backdrop-filter: blur(10px);
     padding: .5em;
     outline: none;
+    font-size: 16px;
     border-style: none;
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    /* border: 1px solid red; */
+}
+
+.dropdown-container {
+    width: 300px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    backdrop-filter: blur(10px);
+    width: 100%;
+    border: 1px solid #ccc;
+    z-index: 1;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-content a {
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Background of the scrollbar */
+::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px); 
+}
+
+/* Scrollbar handle */
+::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+}
+
+/* Hover effect on scrollbar */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.dropdown-content a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+}
+
+.show {
+    display: block;
+}
+
+#weatherInfo {
+    margin-top: 20px;
 }
 
 .dropdown-container {
@@ -191,6 +306,18 @@ body {
     /* border: 1px solid blue; */
 }
 
+.description--weather {
+    width: 70%;
+    text-align: justify;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 1em;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    z-index: 1;
+}
+
 .content .content-right {
     display: flex;
     flex-direction: column;
@@ -206,6 +333,15 @@ body {
     flex-direction: column;
     gap: 0 1em;
     /* border: 1px solid red; */
+}
+
+.city p {
+    line-height: 1.5;
+}
+
+.city .temp {
+    font-size: 1.5rem;
+    font-weight: 500;
 }
 
 .temp--condition {
@@ -319,6 +455,14 @@ body {
     flex-direction: column;
     justify-content: space-between;
     gap: .5em;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+.card:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border: .5px solid rgba(255, 255, 255, 0.3);
 }
 
 .card--flex {
