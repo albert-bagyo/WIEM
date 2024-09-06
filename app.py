@@ -232,6 +232,8 @@ def generate_description(weather,location):
     except:
         wind_gust = 20
     
+    sunr_time = datetime.fromtimestamp(weather['sys']['sunrise']).strftime( "%H : %M" )
+    suns_time = datetime.fromtimestamp(weather['sys']['sunset']).strftime( "%H : %M" )
     param = {
     'location' : location,
     'temperature' : weather['main']['temp'] - 273,
@@ -242,8 +244,8 @@ def generate_description(weather,location):
     'wind_speed' : weather['wind']['speed'],
     'wind_gust' : wind_gust,
     'wind_dir' :  weather['wind']['deg'],
-    'sunrise_str' : weather['sys']['sunrise'],
-    'sunset_str' : weather['sys']['sunset']}
+    'sunrise_str' : sunr_time,
+    'sunset_str' : suns_time}
     
     templates = [
         "In {location}, the current temperature is around {temperature:.1f}°C, but it feels like {feels_like:.1f}°C due to the humidity at {humidity}%. The sky is {clouds}% covered with clouds, and visibility is quite clear at {visibility:.1f} km. Winds are blowing at {wind_speed:.1f} m/s with gusts reaching {wind_gust:.1f} m/s from {wind_dir}°. Sunrise occurred at {sunrise_str} UTC, and sunset will be at {sunset_str} UTC.",
