@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, request
+from flask_caching import Cache
 import requests
 import pyowm
 import json
@@ -16,6 +17,7 @@ finally:
     config.close()
 
 app = Flask(__name__)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 african_countries = [
         "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi",
@@ -215,6 +217,7 @@ backgrounds = {
 
 
 @app.route('/')
+@cache.cached(timeout=300)
 def index():
     
     return redirect('/weather/ghana/tw')
